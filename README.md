@@ -1,6 +1,6 @@
 ## Human Pose Estimation in PyTorch at KAU(Korea Aerospace University)
 
-The base of this git repository from the simplified version of the HR-Net that you can find the below git repository.
+The base of this git repository are the simplified version of the HR-Net that you can find the below git repository.
 We use the original source code as our baseline and modify the code to get more robust human pose in noisy and wild environment.
 
 [Simple-HRNet](https://github.com/stefanopini/simple-HRNet)
