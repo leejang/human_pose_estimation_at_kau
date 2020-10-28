@@ -5,6 +5,23 @@ We use the original source code as our baseline and our starting point, then sta
 
 [Simple-HRNet](https://github.com/stefanopini/simple-HRNet)
 
+### How to run the demonstraion
+
+```
+# with Kalman Filter
+# Pose Estimation on a Recorded Video
+python scripts/kau_pose_video.py --filename Data/Contemp_Solo_Dance.mp4
+
+# Pose Estimation on an Live Video (e.g., Video Stream from WebCam)
+python scripts/kau_pose_webcam.py
+
+# Without Kalman Filter (disable Kalman Filtering)
+# For Video Input
+python scripts/kau_pose_video.py --filename Data/Contemp_Solo_Dance.mp4 --disable_filtering
+# For Live Demo (Webcam Input)
+python scripts/kau_pose_webcam.py --disable_filtering
+```
+
 The below are the description about how to use the original source code from the above git repository.
 
 

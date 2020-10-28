@@ -129,7 +129,7 @@ def kalman_filter(points):
 ##########################################################################################################
 
 def main(camera_id, filename, hrnet_m, hrnet_c, hrnet_j, hrnet_weights, hrnet_joints_set, image_resolution,
-         single_person, use_tiny_yolo, disable_tracking, max_batch_size, disable_vidgear, save_video, video_format,
+         single_person, use_tiny_yolo, disable_tracking, disable_filtering, max_batch_size, disable_vidgear, save_video, video_format,
          video_framerate, device):
     if device is not None:
         device = torch.device(device)
@@ -188,8 +188,10 @@ def main(camera_id, filename, hrnet_m, hrnet_c, hrnet_j, hrnet_weights, hrnet_jo
         prev_person_ids = None
         next_person_id = 0
 
-    # initialize kalman filter
-    kalman_filter_init()
+    if not disable_filtering:
+        # initialize kalman filter
+        kalman_filter_init()
+
     frame_cnt = 0
     while True:
         t = time.time()
@@ -231,9 +233,10 @@ def main(camera_id, filename, hrnet_m, hrnet_c, hrnet_j, hrnet_weights, hrnet_jo
         else:
             person_ids = np.arange(len(pts), dtype=np.int32)
 
-        for i, (pt, pid) in enumerate(zip(pts, person_ids)):
-            # for kalman filter=
-            pt = kalman_filter(pt)
+        for i, (pt, pid) in enumerate(zip(pts, person_ids)):            
+            if not disable_filtering:
+                # for kalman filter=
+                pt = kalman_filter(pt)
 
             frame = draw_points_and_skeleton(frame, pt, joints_dict()[hrnet_joints_set]['skeleton'], person_index=pid,
                                              points_color_palette='gist_rainbow', skeleton_color_palette='jet',
@@ -290,6 +293,9 @@ if __name__ == '__main__':
                         action="store_true")
     parser.add_argument("--disable_tracking",
                         help="disable the skeleton tracking and temporal smoothing functionality",
+                        action="store_true")
+    parser.add_argument("--disable_filtering",
+                        help="disable the kalman filter based smoothing",
                         action="store_true")
     parser.add_argument("--max_batch_size", help="maximum batch size used for inference", type=int, default=16)
     parser.add_argument("--disable_vidgear",
